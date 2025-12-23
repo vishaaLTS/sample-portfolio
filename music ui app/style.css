@@ -1,0 +1,105 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #1d2671, #c33764);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.music-app {
+    width: 300px;
+    background: #111;
+    border-radius: 20px;
+    padding: 20px;
+    color: white;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.album-art {
+    display: flex;
+    justify-content: center;
+}
+
+.album-art img {
+    width: 200px;
+    border-radius: 15px;
+    transition: transform 0.4s;
+}
+
+.album-art img:hover {
+    transform: scale(1.05) rotate(2deg);
+}
+
+.song-info {
+    text-align: center;
+    margin: 15px 0;
+}
+
+.song-info p {
+    color: #aaa;
+    font-size: 14px;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-around;
+    margin: 15px 0;
+}
+
+.controls button {
+    background: #222;
+    border: none;
+    color: white;
+    font-size: 18px;
+    padding: 12px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.controls button:hover {
+    background: #c33764;
+    transform: scale(1.1);
+}
+
+.play {
+    background: #c33764;
+}
+
+.play:hover {
+    background: #ff4f8b;
+}
+
+.playlist {
+    margin-top: 15px;
+}
+
+.track {
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    background: #222;
+    cursor: pointer;
+ /* transition: background 0.3s, transform 0.3s;*/
+}
+
+.track:hover {
+    background: #333;
+    transform: translateX(5px);
+}
+
+.track.active {
+    background: #c33764;
+}
