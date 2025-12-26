@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Social Media UI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f2f2f2;
+        }
+
+        /* Header */
+        .header {
+            background-color: #ffffff;
+            padding: 15px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            border-bottom: 1px solid #ddd;
+            position: sticky;
+            top: 0;
+        }
+
+        /* Feed container */
+        .feed {
+            max-width: 400px;
+            margin: 20px auto;
+        }
+
+        /* Post card */
+        .post {
+            background-color: #ffffff;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .profile-pic {
+            width: 40px;
+            height: 40px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .username {
+            font-weight: bold;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 220px;
+            background-color: #fb5a5a;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            border-top: 1px solid #eee;
+        }
+
+        .post-actions span {
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .post-caption {
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        /* Bottom navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            background-color: #ffffff;
+            border-top: 1px solid #ddd;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+
+        .bottom-nav span {
+            font-size: 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">MySocial</div>
+
+    <div class="feed">
+
+        <div class="post">
+            <div class="post-header">
+                <div class="profile-pic"></div>
+                <div class="username">user_one</div>
+            </div>
+            <div class="post-image"></div>
+            <div class="post-actions">
+                <span>❤️</span>
+                <span>💬</span>
+                <span>🔁</span>
+            </div>
+            <div class="post-caption">
+                This is a sample post caption.
+            </div>
+        </div>
+
+        <div class="post">
+            <div class="post-header">
+                <div class="profile-pic"></div>
+                <div class="username">user_two</div>
+            </div>
+            <div class="post-image"></div>
+            <div class="post-actions">
+                <span>❤️</span>
+                <span>💬</span>
+                <span>🔁</span>
+            </div>
+            <div class="post-caption">
+                Another post from a different user.
+            </div>
+        </div>
+
+    </div>
+
+    <div class="bottom-nav">
+        <span>🏠</span>
+        <span>🔍</span>
+        <span>➕</span>
+        <span>❤️</span>
+        <span>👤</span>
+    </div>
+
+</body>
+</html>
