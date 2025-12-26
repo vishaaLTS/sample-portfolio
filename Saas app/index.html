@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SaaS Homepage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Inter, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+
+        /* Navbar */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 60px;
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .nav-links a {
+            margin-left: 25px;
+            text-decoration: none;
+            color: #334155;
+            font-size: 14px;
+        }
+
+        .nav-btn {
+            padding: 8px 16px;
+            background: #2563eb;
+            color: #ffffff;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        /* Hero section */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 80px 60px;
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .hero-text {
+            max-width: 500px;
+        }
+
+        .hero-text h1 {
+            font-size: 42px;
+            margin-bottom: 20px;
+        }
+
+        .hero-text p {
+            font-size: 16px;
+            color: #475569;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .hero-buttons a {
+            padding: 12px 22px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 14px;
+            margin-right: 15px;
+        }
+
+        .primary-btn {
+            background: #2563eb;
+            color: #ffffff;
+        }
+
+        .secondary-btn {
+            border: 1px solid #cbd5f5;
+            color: #2563eb;
+            background: #ffffff;
+        }
+
+        .hero-image {
+            width: 420px;
+            height: 280px;
+            background: linear-gradient(135deg, #2563eb, #60a5fa);
+            border-radius: 14px;
+        }
+
+        /* Features */
+        .features {
+            background: #ffffff;
+            padding: 70px 60px;
+        }
+
+        .features h2 {
+            text-align: center;
+            font-size: 30px;
+            margin-bottom: 50px;
+        }
+
+        .feature-grid {
+            max-width: 1100px;
+            margin: auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .feature-card {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #e5e7eb;
+        }
+
+        .feature-card h3 {
+            font-size: 18px;
+            margin-bottom: 12px;
+        }
+
+        .feature-card p {
+            font-size: 14px;
+            color: #475569;
+            line-height: 1.6;
+        }
+
+        /* CTA */
+        .cta {
+            padding: 80px 60px;
+            text-align: center;
+            background: linear-gradient(135deg, #2563eb, #1e40af);
+            color: #ffffff;
+        }
+
+        .cta h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .cta p {
+            font-size: 15px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .cta a {
+            background: #ffffff;
+            color: #2563eb;
+            padding: 12px 26px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 30px;
+            text-align: center;
+            font-size: 13px;
+            color: #64748b;
+            background: #ffffff;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-image {
+                margin-top: 40px;
+                width: 100%;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="logo">SaaSify</div>
+        <div class="nav-links">
+            <a href="#">Features</a>
+            <a href="#">Pricing</a>
+            <a href="#">Docs</a>
+            <a href="#" class="nav-btn">Get Started</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-text">
+            <h1>Build faster. Scale smarter.</h1>
+            <p>
+                SaaSify helps teams manage products, track growth, and ship faster
+                with one simple platform.
+            </p>
+            <div class="hero-buttons">
+                <a href="#" class="primary-btn">Start Free Trial</a>
+                <a href="#" class="secondary-btn">View Demo</a>
+            </div>
+        </div>
+        <div class="hero-image"></div>
+    </section>
+
+    <section class="features">
+        <h2>Everything you need</h2>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>Analytics</h3>
+                <p>
+                    Track usage, performance, and growth with real-time dashboards.
+                </p>
+            </div>
+            <div class="feature-card">
+                <h3>Automation</h3>
+                <p>
+                    Automate workflows and reduce manual work across your team.
+                </p>
+            </div>
+            <div class="feature-card">
+                <h3>Security</h3>
+                <p>
+                    Enterprise-grade security with role-based access and encryption.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta">
+        <h2>Start building today</h2>
+        <p>No credit card required. Get started in minutes.</p>
+        <a href="#">Create your account</a>
+    </section>
+
+    <footer class="footer">
+        © 2025 SaaSify. All rights reserved.
+    </footer>
+
+</body>
+</html>
