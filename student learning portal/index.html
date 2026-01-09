@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Student Learning Portal</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+}
+
+/* ---------- AUTH ---------- */
+#auth {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #2c3e50, #4ca1af);
+}
+
+.auth-card {
+  background: #fff;
+  padding: 30px;
+  width: 340px;
+  border-radius: 14px;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  text-align: center;
+}
+
+.auth-card input,
+.auth-card button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 12px;
+}
+
+.auth-card button {
+  background: #2c3e50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+/* ---------- DASHBOARD ---------- */
+#dashboard {
+  display: none;
+}
+
+header {
+  background: #1f1f1f;
+  color: white;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header .right {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+#profileImg {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #555;
+  object-fit: cover;
+}
+
+main {
+  padding: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+button {
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+/* Lists */
+ul {
+  padding: 0;
+}
+
+li {
+  list-style: none;
+  background: #eee;
+  padding: 6px;
+  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Progress bar */
+.progress {
+  background: #ddd;
+  height: 10px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.progress div {
+  height: 100%;
+  background: #4ca1af;
+  width: 0%;
+}
+</style>
+</head>
+
+<body>
+
+<!-- LOGIN -->
+<div id="auth">
+  <div class="auth-card">
+    <h2>Student Login</h2>
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+    <button type="button" onclick="login()">Login</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+
+<header>
+  <div>Welcome, <span id="userName"></span></div>
+  <div class="right">
+    <label>
+      Upload
+      <input type="file" hidden id="profileUpload">
+    </label>
+    <img id="profileImg">
+    <button onclick="logout()">Logout</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- Courses -->
+  <div class="card">
+    <h3>Courses</h3>
+    <input id="courseInput" placeholder="New course">
+    <button onclick="addCourse()">Add</button>
+    <ul id="courseList"></ul>
+  </div>
+
+  <!-- Notes -->
+  <div class="card">
+    <h3>Notes</h3>
+    <textarea id="notes" rows="5" placeholder="Write notes..."></textarea>
+    <button onclick="saveNotes()">Save</button>
+  </div>
+
+  <!-- Progress -->
+  <div class="card">
+    <h3>Progress</h3>
+    <div class="progress"><div id="progressBar"></div></div>
+    <p id="progressText">0%</p>
+  </div>
+
+  <!-- Quiz -->
+  <div class="card">
+    <h3>Quiz</h3>
+    <p>HTML stands for?</p>
+    <select id="quiz">
+      <option value="">Select</option>
+      <option>Hyper Text Markup Language</option>
+      <option>High Text Machine Language</option>
+    </select>
+    <button onclick="checkQuiz()">Submit</button>
+    <p id="quizResult"></p>
+  </div>
+
+  <!-- Timer -->
+  <div class="card">
+    <h3>Study Timer</h3>
+    <p id="timer">20:00</p>
+    <button onclick="startTimer()">Start</button>
+    <button onclick="resetTimer()">Reset</button>
+  </div>
+
+  <!-- API -->
+  <div class="card">
+    <h3>Tip of the Day</h3>
+    <p id="tip">Loading...</p>
+  </div>
+
+</main>
+</div>
+
+<script>
+console.log("JS loaded");
+
+/* ---------- AUTH ---------- */
+function login() {
+  const u = username.value.trim();
+  const p = password.value.trim();
+
+  if (u === "student" && p === "learn123") {
+    localStorage.setItem("user", u);
+    showDashboard();
+  } else {
+    alert("Invalid credentials");
+  }
+}
+
+function logout() {
+  localStorage.clear();
+  location.reload();
+}
+
+function showDashboard() {
+  auth.style.display = "none";
+  dashboard.style.display = "block";
+  userName.innerText = localStorage.getItem("user");
+  loadData();
+}
+
+/* ---------- COURSES ---------- */
+function addCourse() {
+  const courses = JSON.parse(localStorage.getItem("courses")) || [];
+  courses.push(courseInput.value);
+  localStorage.setItem("courses", JSON.stringify(courses));
+  courseInput.value = "";
+  renderCourses();
+  updateProgress();
+}
+
+function renderCourses() {
+  courseList.innerHTML = "";
+  const courses = JSON.parse(localStorage.getItem("courses")) || [];
+  courses.forEach((c, i) => {
+    const li = document.createElement("li");
+    li.innerHTML = `${c} <button onclick="removeCourse(${i})">X</button>`;
+    courseList.appendChild(li);
+  });
+}
+
+function removeCourse(i) {
+  const courses = JSON.parse(localStorage.getItem("courses"));
+  courses.splice(i,1);
+  localStorage.setItem("courses", JSON.stringify(courses));
+  renderCourses();
+  updateProgress();
+}
+
+/* ---------- NOTES ---------- */
+function saveNotes() {
+  localStorage.setItem("notes", notes.value);
+}
+
+/* ---------- PROGRESS ---------- */
+function updateProgress() {
+  const courses = JSON.parse(localStorage.getItem("courses")) || [];
+  const percent = Math.min(courses.length * 20, 100);
+  progressBar.style.width = percent + "%";
+  progressText.innerText = percent + "%";
+}
+
+/* ---------- QUIZ ---------- */
+function checkQuiz() {
+  if (quiz.value === "Hyper Text Markup Language") {
+    quizResult.innerText = "Correct!";
+  } else {
+    quizResult.innerText = "Wrong answer";
+  }
+}
+
+/* ---------- TIMER ---------- */
+let time = 1200, interval;
+function startTimer() {
+  clearInterval(interval);
+  interval = setInterval(() => {
+    time--;
+    updateTimer();
+    if (time <= 0) clearInterval(interval);
+  },1000);
+}
+function resetTimer() {
+  clearInterval(interval);
+  time = 1200;
+  updateTimer();
+}
+function updateTimer() {
+  const m = String(Math.floor(time/60)).padStart(2,"0");
+  const s = String(time%60).padStart(2,"0");
+  timer.innerText = m + ":" + s;
+}
+
+/* ---------- PROFILE ---------- */
+profileUpload.addEventListener("change", e => {
+  const r = new FileReader();
+  r.onload = () => {
+    localStorage.setItem("profile", r.result);
+    profileImg.src = r.result;
+  };
+  r.readAsDataURL(e.target.files[0]);
+});
+
+/* ---------- API (SAFE) ---------- */
+function fetchTip() {
+  fetch("https://api.quotable.io/random")
+    .then(r => r.json())
+    .then(d => tip.innerText = d.content)
+    .catch(() => {
+      tip.innerText = "Consistency beats motivation.";
+    });
+}
+
+/* ---------- LOAD ---------- */
+function loadData() {
+  renderCourses();
+  notes.value = localStorage.getItem("notes") || "";
+  const img = localStorage.getItem("profile");
+  if (img) profileImg.src = img;
+  updateProgress();
+  fetchTip();
+}
+
+window.onload = () => {
+  if (localStorage.getItem("user")) showDashboard();
+};
+</script>
+
+</body>
+</html>
