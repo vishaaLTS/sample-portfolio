@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Personal Productivity Dashboard</title>
+<header class="topbar">
+  <div class="left">
+    <h2>Welcome, <span id="userName"></span></h2>
+  </div>
+
+  <div class="right">
+    <label class="upload-btn">
+      Upload
+      <input type="file" id="profileUpload" accept="image/*" hidden>
+    </label>
+
+    <img id="profileImage">
+
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+</header>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  margin: 0;
+}
+
+.hidden {
+  display: none;
+}
+
+#auth {
+  max-width: 320px;
+  margin: 120px auto;
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  text-align: center;
+}
+
+input, textarea, button {
+  padding: 8px;
+  margin: 6px 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* ===== HEADER ===== */
+.topbar {
+  background: #1f1f1f;
+  color: white;
+  padding: 12px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.topbar h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.topbar .right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.upload-btn {
+  background: #444;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.logout-btn {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 6px 14px;
+  border-radius: 6px;
+}
+
+/* Profile image */
+#profileImage {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #666;
+}
+
+/* ===== GRID ===== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+.card {
+  background: white;
+  padding: 16px;
+  border-radius: 10px;
+}
+
+.card h3 {
+  margin-top: 0;
+}
+
+.card input,
+.card textarea,
+.card button {
+  width: 100%;
+}
+
+/* Tasks */
+ul {
+  padding: 0;
+  margin-top: 10px;
+}
+
+li {
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  background: #eee;
+  padding: 6px;
+  border-radius: 5px;
+  margin-bottom: 5px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div id="auth">
+  <h2>Login / Sign Up</h2>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+</div>
+
+<div id="dashboard" class="hidden">
+
+<header>
+  <h2>Welcome, <span id="userName"></span></h2>
+  <input type="file" id="profileUpload" accept="image/*">
+  <img id="profileImage">
+  <button onclick="logout()">Logout</button>
+</header>
+
+<section class="grid">
+
+  <div class="card">
+    <h3>Tasks</h3>
+    <input type="text" id="taskInput" placeholder="New task">
+    <button onclick="addTask()">Add Task</button>
+    <ul id="taskList"></ul>
+  </div>
+
+  <div class="card">
+    <h3>Notes</h3>
+    <textarea id="noteInput" placeholder="Write notes..."></textarea>
+    <button onclick="saveNotes()">Save Notes</button>
+  </div>
+
+  <div class="card">
+    <h3>Weather</h3>
+    <p id="weatherInfo">Loading...</p>
+  </div>
+
+  <div class="card">
+    <h3>Quote</h3>
+    <p id="quote">Loading...</p>
+  </div>
+
+  <div class="card">
+    <h3>Focus Timer</h3>
+    <p id="timer">25:00</p>
+    <button onclick="startTimer()">Start</button>
+    <button onclick="resetTimer()">Reset</button>
+  </div>
+
+</section>
+</div>
+
+<script>
+let timerInterval;
+let timeLeft = 1500;
+
+// Login
+function login() {
+  const username = document.getElementById("username").value;
+  if (!username) return alert("Enter username");
+
+  localStorage.setItem("user", username);
+  showDashboard();
+}
+
+function logout() {
+  localStorage.removeItem("user");
+  location.reload();
+}
+
+function showDashboard() {
+  document.getElementById("auth").classList.add("hidden");
+  document.getElementById("dashboard").classList.remove("hidden");
+  document.getElementById("userName").innerText = localStorage.getItem("user");
+  loadData();
+}
+
+window.onload = () => {
+  if (localStorage.getItem("user")) {
+    showDashboard();
+  }
+};
+
+// Tasks
+function addTask() {
+  const taskInput = document.getElementById("taskInput");
+  if (!taskInput.value) return;
+
+  const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+  tasks.push(taskInput.value);
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  taskInput.value = "";
+  renderTasks();
+}
+
+function renderTasks() {
+  const taskList = document.getElementById("taskList");
+  taskList.innerHTML = "";
+  const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+  tasks.forEach((task, index) => {
+    const li = document.createElement("li");
+    li.innerHTML = `${task} <button onclick="deleteTask(${index})">X</button>`;
+    taskList.appendChild(li);
+  });
+}
+
+function deleteTask(index) {
+  const tasks = JSON.parse(localStorage.getItem("tasks"));
+  tasks.splice(index, 1);
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  renderTasks();
+}
+
+// Notes
+function saveNotes() {
+  localStorage.setItem("notes", document.getElementById("noteInput").value);
+}
+
+// Profile image
+document.getElementById("profileUpload").addEventListener("change", e => {
+  const reader = new FileReader();
+  reader.onload = () => {
+    localStorage.setItem("profileImage", reader.result);
+    document.getElementById("profileImage").src = reader.result;
+  };
+  reader.readAsDataURL(e.target.files[0]);
+});
+
+// Weather
+function fetchWeather() {
+  navigator.geolocation.getCurrentPosition(pos => {
+    fetch(`https://api.open-meteo.com/v1/forecast?latitude=${pos.coords.latitude}&longitude=${pos.coords.longitude}&current_weather=true`)
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("weatherInfo").innerText =
+          "Temperature: " + data.current_weather.temperature + "°C";
+      });
+  });
+}
+
+// Quote
+function fetchQuote() {
+  fetch("https://api.quotable.io/random")
+    .then(res => res.json())
+    .then(data => document.getElementById("quote").innerText = data.content);
+}
+
+// Timer
+function startTimer() {
+  clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimer();
+    if (timeLeft <= 0) clearInterval(timerInterval);
+  }, 1000);
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timeLeft = 1500;
+  updateTimer();
+}
+
+function updateTimer() {
+  const min = String(Math.floor(timeLeft / 60)).padStart(2, "0");
+  const sec = String(timeLeft % 60).padStart(2, "0");
+  document.getElementById("timer").innerText = min + ":" + sec;
+}
+
+// Load stored data
+function loadData() {
+  renderTasks();
+  document.getElementById("noteInput").value = localStorage.getItem("notes") || "";
+
+  const img = localStorage.getItem("profileImage");
+  if (img) document.getElementById("profileImage").src = img;
+
+  fetchWeather();
+  fetchQuote();
+}
+</script>
+
+</body>
+</html>
